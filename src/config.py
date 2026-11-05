@@ -1,0 +1,28 @@
+import os
+from dotenv import load_dotenv
+
+from aiogram import Bot, Dispatcher
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    DB_USER: str
+    DB_PASS: str
+    DB_HOST: str
+    DB_PORT: int
+    DB_NAME: str
+
+    @property
+    def get_url_db(self):
+        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+
+settings = Settings()  # Переменная для обращения к настройкам БД
+
+load_dotenv()  # Ищем файл .env
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+bot = Bot(token=str(BOT_TOKEN))
+dp = Dispatcher()
