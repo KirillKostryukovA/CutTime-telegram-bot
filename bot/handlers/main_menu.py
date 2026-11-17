@@ -3,6 +3,8 @@ from aiogram.types import Message
 from aiogram.filters.command import Command, CommandStart
 
 import bot.keyboards.inline_keyboards as inl_kb
+from infrastructure.repositories.orm import AsyncOrm
+
 
 router = Router()
 
@@ -10,6 +12,7 @@ router = Router()
 # Главное меню через команду Start
 @router.message(CommandStart)
 async def main_menu_user(message: Message):
+    await AsyncOrm.add_user(tg_id=message.from_user.id)
     await message.answer(
         f"""
 Привет, {message.from_user.first_name}! 👋 Добро пожаловать в CutTime — бот записи к барберу.

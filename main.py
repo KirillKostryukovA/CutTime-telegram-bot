@@ -5,6 +5,7 @@ from sqlalchemy import text
 from infrastructure.database import engine, Base
 from infrastructure.models import User, Master, Service, WorkingHour, Booking
 from bot.handlers.main_menu import router as menu_router
+from bot.handlers.entries import router as entries_router
 
 from src.config import bot, dp
 
@@ -20,6 +21,7 @@ async def main():
     print("Начало работы Бота")
 
     dp.include_router(menu_router)
+    dp.include_router(entries_router)
     await dp.start_polling(bot)
 
 

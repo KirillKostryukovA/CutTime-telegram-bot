@@ -1,4 +1,3 @@
-from enum import Enum
 from datetime import datetime, time
 
 from sqlalchemy import (
@@ -14,36 +13,8 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import ExcludeConstraint, TSTZRANGE
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
+from domain.enums import ServiceType, DayOfWeek, BookingStatus
 from infrastructure.database import Base
-
-
-# Тип для задания услуг
-class ServiceType(Enum):
-    haircut = "Стрижка волос"
-    hair_styling = "Укладка волос"
-    hair_correction = "Коррекция волос"
-    head_care = "Уход за головой"
-    beard_trimming = "Стрижка бороды"
-
-
-# День недели для записи
-class DayOfWeek(Enum):
-    monday = "Понедельник"
-    tuesday = "Вторник"
-    wednesday = "Среда"
-    thursday = "Четверг"
-    friday = "Пятница"
-    saturday = "Суббота"
-    sunday = "Воскресенье"
-
-
-# Статус брони
-class BookingStatus(Enum):
-    confirmed = "Подтверждённый"
-    cancelled_by_user = "Отменённый пользователем"
-    cancelled_by_master = "Отменённый барбером"
-    in_process = "В процессе"
 
 
 # Информацию о пользователе
@@ -155,7 +126,8 @@ class WorkingHour(Base):
 
     # Связь one2one схемы с схемой мастера
     master: Mapped["Master"] = relationship(back_populates="working_hours")
-
+    bookings: Mapped["Booking"] = relationship(back_populates="working")
+ 
 
 # Бронирование записи от лица пользователя
 class Booking(Base):
